@@ -3,7 +3,6 @@ from dash import dcc, html, Input, Output
 import plotly.express as px
 import pandas as pd
 
-# Step 1: Create Dataset
 world_cup = pd.DataFrame({
     "year": [1930, 1934, 1938, 1950, 1954, 1958, 1962, 1966, 1970, 1974, 1978, 1982, 1986, 1990, 1994, 1998, 2002, 2006, 2010, 2014, 2018, 2022], 
     "winner": ["Uruguay", "Italy", "Italy", "Uruguay", "Germany", "Brazil", "Brazil", "England", "Brazil", "Germany", "Argentina", "Italy", "Argentina", "Germany", "Brazil", "France", "Brazil", "Italy", "Spain", "Germany", "France", "Argentina"],
@@ -16,10 +15,11 @@ win_counts.columns = ["Country", "Wins"]
 
 # Dash App Setup
 app = dash.Dash(__name__)
+
+server = app.server
 app.layout = html.Div([
     html.H1("FIFA World Cup Winners Dashboard", style={'textAlign': 'center'}),
     
-    # Choropleth Map
     dcc.Graph(id="world_map"),
     
     # Dropdown to select a country
@@ -47,7 +47,6 @@ app.layout = html.Div([
     html.Div(id="year_result", style={"fontSize": "20px", "marginTop": "20px"})
 ])
 
-# Callbacks
 @app.callback(
     Output("world_map", "figure"),
     Input("country_dropdown", "value")
@@ -92,6 +91,5 @@ def update_year_result(selected_year):
         return "No data available."
     return f"Winner: {result.iloc[0]['winner']}, Runner-up: {result.iloc[0]['runner_up']}"
 
-# Run app
 if __name__ == "__main__":
     app.run(debug=True, port=8051)
